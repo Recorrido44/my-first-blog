@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="post">
+        {% if viaje.fechaini %}
+            <div class="date">
+                {{ viaje.fechaini }}
+            </div>
+        {% endif %}
+        <a class="btn btn-default" href="{% url 'viaje_edit' pk=viaje.pk %}"><span class="glyphicon glyphicon-pencil"></span></a>
+        <h2>{{ viaje.tipo }}</h2>
+    </div>
+{% endblock %}
