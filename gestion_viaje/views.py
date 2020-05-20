@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 
 from django.shortcuts import render, redirect, get_object_or_404
-from forms import ParametroForm, PostForm, ViajeForm
+from gestion_viaje.forms import ParametroForm, PostForm, ViajeForm
 from django.utils import timezone
 from gestion_viaje.models import Parametro, Kilometro
 
