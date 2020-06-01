@@ -22,10 +22,11 @@ from gestion_viaje import views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^post/(?P<pk>[0-9]+)/$', views.post_detail, name='post_detail'),
-    url(r'^post/new/$', views.post_new, name='post_new'),
-    url(r'^post/(?P<pk>[0-9]+)/$', views.post_edit, name='post_edit'),
-    url(r'^viaje/new/$', views.viaje_new, name='viaje_new'),
-    url(r'^viaje/(?P<pk>[0-9]+)/$', views.viaje_detail, name='viaje_detail'),
-    url(r'^viaje/(?P<pk>[0-9]+)/$', views.viaje_edit, name='viaje_edit'),
+    url(r'^viaje/nuevo/$', views.Km_Nuevo_Vista.as_view(), name='kilometro_nuevo'),
+    url(r'^viaje/final/(?P<pk>[0-9]+)/$', views.Km_Final_Vista.as_view(), name='kilometro_final'),
+    url(r'^viaje/resumen/$', views.Km_Resumen_Vista.as_view(), name='kilometro_resumen'),
+    url(r'^viaje/finalizar/$', views.Km_Finalizar_Vista.as_view(), name='kilometro_finalizar'),
+    url(r'^viaje/borrar/(?P<pk>[0-9]+)/$', views.Km_Eliminar_Vista.as_view(), name='kilometro_borrar'),
+
+
 ]

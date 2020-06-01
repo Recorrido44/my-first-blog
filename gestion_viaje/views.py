@@ -1,72 +1,78 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.shortcuts import render, redirect, get_object_or_404
-from gestion_viaje.forms import ParametroForm, PostForm, ViajeForm
+from django.db.models import F
+from django.core.urlresolvers import reverse_lazy
 from django.utils import timezone
+from django.views.generic import ListView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+
+from gestion_viaje.forms import Km_Nuevo_Form, Km_Final_Form
 from gestion_viaje.models import Parametro, Kilometro
 
 
-def post_new(request):
-    if request.method == "POST":
-        form = PostForm(request.POST)
-        if form.is_valid():
-            post = form.save(commit=False)
-            post.valido = 'T'
-            post.fecha = timezone.now()
-            post.save()
-            return redirect('post_detail', pk=post.pk)
-    else:
-        form = PostForm()
-    return render(request, 'post_edit.html', {'form': form})
+class Km_Muestra_Vista(ListView):
+    modelo = Kilometro
+    template_name = 'km_muestra.html'
 
-def post_edit(request, pk):
-    post = get_object_or_404(Parametro, pk=pk)
-    if request.method == "POST":
-        form = PostForm(request.POST, instance=post)
-        if form.is_valid():
-            post = form.save(commit=False)
-            post.valido = 'T'
-            post.fecha = timezone.now()
-            post.save()
-            return redirect('post_detail', pk=post.pk)
-    else:
-        form = PostForm(instance=post)
-    return render(request, 'post_edit.html', {'form': form})
+class Km_Nuevo_Vista(CreateView):
+    model = Kilometro
+    form_class = Km_Nuevo_Form
+    template_name = 'km_nuevo.html'
+    success_url = reverse_lazy('kilometro_resumen')
 
-def post_detail(request, pk):
-    post = get_object_or_404(Parametro, pk=pk)
-    return render(request, 'post_detail.html', {'post': post})
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.entrada = 0
+        self.object.kmfin = self.object.kmini
+        self.object.fechaini = timezone.now()
+        self.object.fechafin = timezone.now()
+        self.object.parametro = Parametro.objects.get(pk=1)
+        self.object.usuario = 'javier'
+        self.object.save()
 
-def viaje_new(request):
-    if request.method == "POST":
-        form = ViajeForm(request.POST)
-        if form.is_valid():
-            viaje = form.save(commit=False)
-            viaje.kmfin = 0
-            viaje.fechaini = timezone.now()
-            viaje.fechafin = timezone.now()
-            viaje.entrada = 0
-            viaje.save()
-            return redirect('viaje_detail', pk=viaje.pk)
-    else:
-        form = ViajeForm()
-    return render(request, 'viaje_edit.html', {'form': form})
+        return super(Km_Nuevo, self).form_valid(form)
 
-def viaje_edit(request, pk):
-    post = get_object_or_404(Kilometro, pk=pk)
-    if request.method == "POST":
-        form = ViajeForm(request.POST, instance=post)
-        if form.is_valid():
-            viaje = form.save(commit=False)
-            viaje.valido = 'T'
-            viaje.fecha = timezone.now()
-            viaje.save()
-            return redirect('viaje_detail', pk=post.pk)
-    else:
-        form = ViajeForm(instance=post)
-    return render(request, 'viaje_edit.html', {'form': form})
 
-def viaje_detail(request, pk):
-    viaje = get_object_or_404(Kilometro, pk=pk)
-    return render(request, 'viaje_detail.html', {'viaje': viaje})
+
+class Km_Resumen_Vista(ListView):
+    model = Kilometro
+    template_name = 'km_resumen.html'
+    def get_queryset(self):
+        return Kilometro.objects.raw("SELECT id, fechafin, (kmfin-kmini) distancia, "
+                                     " ((kmfin-kmini) / (select valor from gestion_viaje_parametro where id = 2 )) "
+                                     " litros, "
+                                     " ((kmfin-kmini)/ "
+                                     " (select valor from gestion_viaje_parametro where id = 2 )) * "
+                                     " (select valor from gestion_viaje_parametro where id = 1 ) gasto, "
+                                     " entrada, "
+                                     " entrada - (((kmfin-kmini)/ "
+                                     " (select valor from gestion_viaje_parametro where id = 2 )) * "
+                                     " (select valor from gestion_viaje_parametro where id = 1 )) ganancia, "
+                                     " ((((kmfin-kmini)/ "
+                                     " (select valor from gestion_viaje_parametro where id = 2 )) * "
+                                     " (select valor from gestion_viaje_parametro where id = 1 ))*100) / entrada "
+                                     " indica_gasto, tipo, substr (vehiculo,1,20) "
+                                     " from gestion_viaje_kilometro"
+                                     " where usuario like 'javier' "
+                                     " and kmfin-kmini > 0 "
+                                     " order by fechafin desc ")
+
+class Km_Final_Vista(UpdateView):
+    model = Kilometro
+    form_class = Km_Final_Form
+    template_name = 'km_final_form.html'
+    success_url = reverse_lazy('kilometro_resumen')
+
+
+class Km_Finalizar_Vista(ListView):
+    model = Kilometro
+    template_name = 'km_final_list.html'
+    def get_queryset(self):
+        return Kilometro.objects.filter(kmfin=F('kmini'))
+
+class Km_Eliminar_Vista(DeleteView):
+    model = Kilometro
+    template_name = 'km_borrar.html'
+    success_url = reverse_lazy('kilometro_resumen')
+

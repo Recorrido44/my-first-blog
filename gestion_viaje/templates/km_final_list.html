@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Registrar final de viaje</h1>
+
+    {% if kilometro_list %}
+    <table>
+        <tr valign="top">
+            <td width="10%" style="border-top: 1px double #808080; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0.1cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+                <p>Fecha</p>
+            </td>
+            <td width="10%" style="border-top: 1px double #808080; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0.1cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+                <p>Km inicial</p>
+            </td>
+            <td width="10%" style="border-top: 1px double #808080; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0.1cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+                <p>Tipo</p>
+            </td>
+            <td width="10%" style="border-top: 1px double #808080; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0.1cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+                <p>Finalizar</p>
+            </td>
+            <td width="10%" style="border-top: 1px double #808080; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: 1px double #808080; padding-top: 0.1cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+                <p>Eliminar</p>
+            </td>
+
+		</tr>
+        <tr>
+      {% for kilometro in kilometro_list %}
+            <td width="10%" style="border-top: 1px double #808080; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0.1cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+                <p> {{kilometro.fechaini}}</p>
+            </td>
+            <td width="10%" style="border-top: 1px double #808080; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0.1cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+                <p> {{kilometro.kmini}}</p>
+            </td>
+            <td width="10%" style="border-top: 1px double #808080; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0.1cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+                <p> {{kilometro.tipo}}</p>
+            </td>
+            <td width="10%" style="border-top: 1px double #808080; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0.1cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+                <p><a href="../final/{{kilometro.id}}" >finalizar </p>
+            </td>
+            <td width="10%" style="border-top: 1px double #808080; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: 1px double #808080; padding-top: 0.1cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+                <p><a href="../borrar/{{kilometro.id}}" > eliminar </p>
+            </td>
+
+        </tr>
+      {% endfor %}
+
+    </table>
+    {% else %}
+      <p>No hay datos a mostrar</p>
+    {% endif %}
+{% endblock %}

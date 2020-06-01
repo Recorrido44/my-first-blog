@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Ganancias por recorrido</h1>
+        <form method="GET" class="post-form">{% csrf_token %}
+            <table>
+                 <td width="10%">
+                    <p></p>
+                </td>
+                <td width="10%">
+                    <p><a href="../nuevo" >Registrar inicio de viaje</p>
+                </td>
+                <td width="10%">
+                    <p></p>
+                </td>
+                <td width="10%">
+                    <p></p>
+                </td>
+                <td width="10%">
+                    <p></p>
+                </td>
+                <td width="10%">
+                    <p><a href="../finalizar" >Registrar final de viaje</button></p>
+                </td>
+            </table>
+        </form>
+    {% if kilometro_list %}
+    <table>
+        <tr valign="top">
+            <td width="10%" style="border-top: 1px double #808080; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0.1cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+                <p>Fecha</p>
+            </td>
+            <td width="10%" style="border-top: 1px double #808080; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0.1cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+                <p>Distancia recorrida KM</p>
+            </td>
+            <td width="10%" style="border-top: 1px double #808080; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0.1cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+                <p>Litros usados L</p>
+            </td>
+            <td width="10%" style="border-top: 1px double #808080; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0.1cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+                <p>Costo $</p>
+            </td>
+            <td width="10%" style="border-top: 1px double #808080; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0.1cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+                <p>Ingreso $</p>
+            </td>
+            <td width="10%" style="border-top: 1px double #808080; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0.1cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+                <p>Ganancia $</p>
+            </td>
+            <td width="10%" style="border-top: 1px double #808080; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: 1px double #808080; padding-top: 0.1cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0.1cm">
+                <p>(gasto x 100)/(ingreso) %</p>
+            </td>
+            <td width="10%" style="border-top: 1px double #808080; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: 1px double #808080; padding-top: 0.1cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0.1cm">
+                <p>Tipo</p>
+            </td>
+            <td width="10%" style="border-top: 1px double #808080; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: 1px double #808080; padding-top: 0.1cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0.1cm">
+                <p>Comentarios</p>
+            </td>
+		</tr>
+        <tr>
+      {% for kilometro in kilometro_list %}
+            <td width="10%" style="border-top: 1px double #808080; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0.1cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+                <p> {{kilometro.fechafin}}</p>
+            </td>
+            <td width="10%" style="border-top: 1px double #808080; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0.1cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+                <p> {{kilometro.distancia}}</p>
+            </td>
+            <td width="10%" style="border-top: 1px double #808080; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0.1cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+                <p> {{kilometro.litros}}</p>
+            </td>
+            <td width="10%" style="border-top: 1px double #808080; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0.1cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+                <p> {{kilometro.gasto}}</p>
+            </td>
+            <td width="10%" style="border-top: 1px double #808080; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0.1cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+                <p> {{kilometro.entrada}}</p>
+            </td>
+            <td width="10%" style="border-top: 1px double #808080; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0.1cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+                <p>{{kilometro.ganancia}}</p>
+            </td>
+            <td width="10%" style="border-top: 1px double #808080; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: 1px double #808080; padding-top: 0.1cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0.1cm">
+                <p> {{kilometro.indica_gasto}}</p>
+            </td>
+            <td width="10%" style="border-top: 1px double #808080; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: 1px double #808080; padding-top: 0.1cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0.1cm">
+                <p> {% if kilometro.tipo == '99' %}
+                        Familiar
+                    {% elif kilometro.tipo == '1' %}
+                        Uber
+                     {% elif kilometro.tipo == '2' %}
+                        Didi
+                     {% elif kilometro.tipo == '3' %}
+                        Cabify
+                </p>
+                    {% endif %}
+            </td>
+            <td width="10%" style="border-top: 1px double #808080; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: 1px double #808080; padding-top: 0.1cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0.1cm">
+                <p> {{kilometro.vehiculo}}</p>
+            </td>
+        </tr>
+      {% endfor %}
+
+    </table>
+    {% else %}
+      <p>No hay datos a mostrar</p>
+    {% endif %}
+{% endblock %}

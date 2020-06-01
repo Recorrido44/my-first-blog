@@ -6,42 +6,23 @@ from django.forms import ModelForm, Textarea, DateTimeInput
 from gestion_viaje.models import Parametro, Kilometro
 import datetime
 
-TOPIC_CHOICES = (
-    ('general', 'General enquiry'),
-    ('bug', 'Bug report'),
-    ('suggestion', 'Suggestion'),
-)
 
-class ContactForm(forms.Form):
-    topic = forms.ChoiceField(choices=TOPIC_CHOICES)
-    message = forms.CharField(widget=forms.Textarea())
-    sender = forms.EmailField(required=False)
-
-
-class ParametroForm(forms.Form):
-    descripcion = forms.CharField(max_length=100)
-    valor = forms.DecimalField(max_digits = 5, decimal_places = 2)
-    valido = forms.CharField(max_length=1)
-    fecha = forms.DateTimeField(initial=datetime.datetime.now())
-
-
-# Create the form class.
-class ParametroForm(ModelForm):
-     class Meta:
-        model = Parametro
-        fields = ['descripcion', 'valor', 'fecha', 'valido']
-
-
-class PostForm(ModelForm):
-    class Meta:
-        model = Parametro
-        fields = ['descripcion', 'valor', ]
-
-class ViajeForm(ModelForm):
+class Km_Nuevo_Form(ModelForm):
     class Meta:
         model = Kilometro
-        fields = ['kmini', 'tipo', ]
+        fields = ['kmini', 'tipo', 'vehiculo', ]
+        labels = {'kmini': ('Kilometro inicial'),
+                  'tipo': ('Tipo de viaje'),
+                  'vehiculo':('Comentarios adicionales')}
+        widgets = {
+            'vehiculo': Textarea(attrs={'cols': 20, 'rows': 3}),
+        }
 
 
+class Km_Final_Form(ModelForm):
+    class Meta:
+        model = Kilometro
+        fields = ['kmfin', 'entrada', ]
+        labels = {'kmfin': ('Kilometro final'), }
 
 
