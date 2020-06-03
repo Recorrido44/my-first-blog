@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 
 from django.db.models import F
-from django.core.urlresolvers import reverse_lazy
+from django.urls import reverse_lazy
 from django.utils import timezone
 from django.views.generic import ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
