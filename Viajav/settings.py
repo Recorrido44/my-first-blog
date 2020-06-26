@@ -25,7 +25,8 @@ SECRET_KEY = '+14$9w3e(qjjo+-)r0@zb@w#1@q33pl!c)yroamva0-k!@z-^y'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+# ALLOWED_HOSTS = ['127.0.0.1', 'recorrido.pythonanywhere.com']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 
 # Application definition
@@ -76,8 +77,12 @@ WSGI_APPLICATION = 'Viajav.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'kalor',
+        'USER': 'pedro21',
+        'PASSWORD': 'pedropon',
+        'HOST': 'localhost',
+        'PORT': '3306',
     }
 }
 

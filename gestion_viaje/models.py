@@ -36,7 +36,84 @@ class Kilometro(models.Model):
 
 
 
+class Tipo (models.Model):
+    txtDescripcion = models.CharField(max_length=100)
+    txtColor = models.CharField(max_length=45)
+    fecha = models.DateField()
+    usuario = models.CharField(max_length=45)
 
+    def __str__(self):
+        """
+        Cadena para representar el objeto MyModelName (en el sitio de Admin, etc.)
+        """
+        return self.txtDescripcion
+
+
+class Porcion (models.Model):
+    txtMedida = models.CharField(max_length=45)
+    fecha = models.DateField()
+    usuario = models.CharField(max_length=45)
+
+    def __str__(self):
+        """
+        Cadena para representar el objeto MyModelName (en el sitio de Admin, etc.)
+        """
+        return self.txtMedida
+
+
+class Alimento (models.Model):
+    txtNomAlim = models.CharField(max_length=100)
+    txtDescrip = models.CharField(max_length=100)
+    intKCal = models.IntegerField()
+    usuario = models.CharField(max_length=45)
+    fecha = models.DateField()
+    tipo = models.ForeignKey(Tipo, on_delete=models.CASCADE)
+    porcion = models.ForeignKey(Porcion, on_delete=models.CASCADE)
+    fuente = models.CharField(max_length=200)
+    cantpor = models.DecimalField(max_digits=5,decimal_places=2)
+
+    def __str__(self):
+        """
+        Cadena para representar el objeto MyModelName (en el sitio de Admin, etc.)
+        """
+        return self.txtNomAlim + ', ' + str(self.cantpor)+' '+ str(self.porcion)+ ', kcal: '+ str(self.intKCal) +'.'
+
+
+
+class Aldia (models.Model):
+    txtAldia = models.CharField(max_length=45)
+    fecha = models.DateField()
+    usuario = models.CharField(max_length=45)
+
+    def __str__(self):
+        """
+        Cadena para representar el objeto MyModelName (en el sitio de Admin, etc.)
+        """
+        return self.txtAldia
+
+class Consumo (models.Model):
+    fecha = models.DateTimeField()
+    usuario = models.CharField(max_length=45)
+    alimento = models.ForeignKey(Alimento, on_delete=models.CASCADE)
+    aldia = models.ForeignKey(Aldia, on_delete=models.CASCADE)
+    porciones = models.DecimalField(max_digits=5, decimal_places=2)
+
+    def __str__(self):
+        """
+        Cadena para representar el objeto MyModelName (en el sitio de Admin, etc.)
+        """
+        return str(self.aldia) + ' - ' + str(self.porciones) + ' porciones de ' + str(self.alimento)
+
+class Peso (models.Model):
+    peso = models.DecimalField(max_digits = 5, decimal_places = 2)
+    fecha = models.DateTimeField()
+    usuario = models.CharField(max_length=45)
+
+    def __str__(self):
+        """
+        Cadena para representar el objeto MyModelName (en el sitio de Admin, etc.)
+        """
+        return self.peso
 
 
 
