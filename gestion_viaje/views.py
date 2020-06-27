@@ -7,8 +7,8 @@ from django.utils import timezone
 from django.views.generic import ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
-from gestion_viaje.forms import Km_Nuevo_Form, Km_Final_Form
-from gestion_viaje.models import Parametro, Kilometro
+from gestion_viaje.forms import Km_Nuevo_Form, Km_Final_Form, Alimento_Nuevo_Form, Alimento_Consumo_Form
+from gestion_viaje.models import Parametro, Kilometro, Alimento, Consumo
 
 
 class Km_Muestra_Vista(ListView):
@@ -31,7 +31,7 @@ class Km_Nuevo_Vista(CreateView):
         self.object.usuario = 'javier'
         self.object.save()
 
-        return super(Km_Nuevo, self).form_valid(form)
+        return super(Km_Nuevo_Vista, self).form_valid(form)
 
 
 
@@ -76,3 +76,43 @@ class Km_Eliminar_Vista(DeleteView):
     template_name = 'km_borrar.html'
     success_url = reverse_lazy('kilometro_resumen')
 
+class Alimento_Nuevo_Vista(CreateView):
+    model = Alimento
+    form_class = Alimento_Nuevo_Form
+    template_name = 'alimento_nuevo.html'
+    success_url = reverse_lazy('consumo_resumen')
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.fecha = timezone.now()
+        self.object.usuario = 'adminjav'
+        self.object.save()
+
+        return super(Alimento_Nuevo_Vista, self).form_valid(form)
+
+
+
+class Alimento_Consumo_Vista(CreateView):
+    model = Consumo
+    form_class = Alimento_Consumo_Form
+    template_name = 'alimento_consumo.html'
+    success_url = reverse_lazy('consumo_resumen')
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.fecha = timezone.now()
+        self.object.usuario = 'adminjav'
+        self.object.save()
+
+        return super(Alimento_Consumo_Vista, self).form_valid(form)
+
+class Alimento_Resumen_Vista(ListView):
+    model = Consumo
+    template_name = 'alimento_resumen.html'
+    def get_queryset(self):
+        return Consumo.objects.raw("select id,fecha, sum(porciones * ( "
+                                                "select intKCal "
+                                                "from  gestion_viaje_alimento "
+                                                "where alimento_id = gestion_viaje_consumo.alimento_id"
+                                                ") )calorias "
+                                            " from gestion_viaje_consumo ")

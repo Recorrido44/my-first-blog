@@ -3,7 +3,7 @@ from datetime import datetime
 from django import forms
 from django.forms import ModelForm, Textarea, DateTimeInput
 
-from gestion_viaje.models import Parametro, Kilometro
+from gestion_viaje.models import Parametro, Kilometro, Alimento, Consumo
 import datetime
 
 
@@ -25,4 +25,32 @@ class Km_Final_Form(ModelForm):
         fields = ['kmfin', 'entrada', ]
         labels = {'kmfin': ('Kilometro final'), }
 
+
+
+class Alimento_Nuevo_Form(ModelForm):
+    class Meta:
+        model = Alimento
+        fields = ['txtNomAlim', 'txtDescrip', 'intKCal','tipo', 'cantpor', 'porcion', 'fuente', ]
+        labels = {'txtNomAlim': ('Alimento nuevo'),
+                  'txtDescrip': ('Descripciòn'),
+                  'intKCal':('Calorìas'),
+                  'tipo': ('Tipo'),
+                  'porcion': ('Porciòn'),
+                  'cantpor': ('Cantidad'),
+                  'fuente': ('Fuente')
+                  }
+        widgets = {
+            'txtDescrip': Textarea(attrs={'cols': 20, 'rows': 2}),
+            'fuente': Textarea(attrs={'cols': 20, 'rows': 2}),
+
+        }
+
+class Alimento_Consumo_Form(ModelForm):
+    class Meta:
+        model = Consumo
+        fields = ['alimento', 'aldia', 'porciones', ]
+        labels = {'alimento': ('Alimento'),
+                  'aldia': ('Cuando'),
+                  'porciones':('Porciones consumidas'),
+                  }
 

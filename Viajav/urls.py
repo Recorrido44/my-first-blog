@@ -27,6 +27,8 @@ urlpatterns = [
     url(r'^viaje/resumen/$', views.Km_Resumen_Vista.as_view(), name='kilometro_resumen'),
     url(r'^viaje/finalizar/$', views.Km_Finalizar_Vista.as_view(), name='kilometro_finalizar'),
     url(r'^viaje/borrar/(?P<pk>[0-9]+)/$', views.Km_Eliminar_Vista.as_view(), name='kilometro_borrar'),
-
+    url(r'^alimento/nuevo/$', views.Alimento_Nuevo_Vista.as_view(), name='alimento_nuevo'),
+    url(r'^alimento/consumo/$', views.Alimento_Consumo_Vista.as_view(), name='alimento_consumo'),
+    url(r'^alimento/resumen/$', views.Alimento_Resumen_Vista.as_view(), name='consumo_resumen'),
 
 ]
