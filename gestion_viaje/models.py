@@ -72,6 +72,9 @@ class Alimento (models.Model):
     fuente = models.CharField(max_length=200)
     cantpor = models.DecimalField(max_digits=5,decimal_places=2)
 
+    class Meta:
+        ordering = ["txtNomAlim"]
+
     def __str__(self):
         """
         Cadena para representar el objeto MyModelName (en el sitio de Admin, etc.)

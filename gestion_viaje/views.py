@@ -111,12 +111,13 @@ class Alimento_Resumen_Vista(ListView):
     model = Consumo
     template_name = 'alimento_resumen.html'
     def get_queryset(self):
-        return Consumo.objects.raw("select id,fecha, sum(porciones * ( "
+        return Consumo.objects.raw("select id,date(fecha), sum(porciones * ( "
                                                 "select intKCal "
                                                 "from  gestion_viaje_alimento "
                                                 "where alimento_id = gestion_viaje_consumo.alimento_id"
                                                 ") )calorias "
-                                            " from gestion_viaje_consumo ")
+                                            " from gestion_viaje_consumo "
+                                            " group by date(fecha)")
 
 
 class Alimento_Verconsumo_Vista(ListView):
