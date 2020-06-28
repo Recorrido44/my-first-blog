@@ -96,7 +96,7 @@ class Alimento_Consumo_Vista(CreateView):
     model = Consumo
     form_class = Alimento_Consumo_Form
     template_name = 'alimento_consumo.html'
-    success_url = reverse_lazy('consumo_resumen')
+    success_url = reverse_lazy('consumo_registro')
 
     def form_valid(self, form):
         self.object = form.save(commit=False)
@@ -105,6 +105,7 @@ class Alimento_Consumo_Vista(CreateView):
         self.object.save()
 
         return super(Alimento_Consumo_Vista, self).form_valid(form)
+
 
 class Alimento_Resumen_Vista(ListView):
     model = Consumo
@@ -116,3 +117,14 @@ class Alimento_Resumen_Vista(ListView):
                                                 "where alimento_id = gestion_viaje_consumo.alimento_id"
                                                 ") )calorias "
                                             " from gestion_viaje_consumo ")
+
+
+class Alimento_Verconsumo_Vista(ListView):
+    model = Consumo
+    template_name = 'consumo_muestra.html'
+
+
+class Alimento_Eliminar_Vista(DeleteView):
+    model = Consumo
+    template_name = 'alimento_borrar.html'
+    success_url = reverse_lazy('consumo_resumen')

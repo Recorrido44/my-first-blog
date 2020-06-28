@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Alimentos consumidos</h1>
+        <form method="GET" class="post-form">{% csrf_token %}
+            <table>
+                 <td width="10%">
+                    <p></p>
+                </td>
+                <td width="10%">
+                    <p><a href="../consumo" >Registrar nuevo consumo</p>
+                </td>
+            </table>
+        </form>
+
+    {% if consumo_list %}
+    <table>
+        <tr valign="top">
+            <td width="10%" style="border-top: 1px double #808080; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0.1cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+                <p>Fecha</p>
+            </td>
+            <td width="10%" style="border-top: 1px double #808080; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0.1cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+                <p>Distribuciòn</p>
+            </td>
+            <td width="10%" style="border-top: 1px double #808080; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0.1cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+                <p>Alimento</p>
+            </td>
+             <td width="10%" style="border-top: 1px double #808080; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0.1cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+                <p>Porciones</p>
+            </td>
+            <td width="10%" style="border-top: 1px double #808080; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: 1px double #808080; padding-top: 0.1cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+                <p>Acciòn</p>
+            </td>
+		</tr>
+        <tr>
+      {% for consumo in consumo_list %}
+            <td width="10%" style="border-top: 1px double #808080; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0.1cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+                <p> {{consumo.fecha}}</p>
+            </td>
+            <td width="10%" style="border-top: 1px double #808080; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0.1cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+                <p> {{consumo.aldia}}</p>
+            </td>
+            <td width="10%" style="border-top: 1px double #808080; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0.1cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+                <p> {{consumo.alimento}}</p>
+            </td>
+            <td width="10%" style="border-top: 1px double #808080; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0.1cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+                <p> {{consumo.porciones}}</p>
+            </td>
+            <td width="10%" style="border-top: 1px double #808080; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: 1px double #808080; padding-top: 0.1cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+                <p><a href="../borrar/{{consumo.id}}" > eliminar </p>
+            </td>
+        </tr>
+      {% endfor %}
+
+    </table>
+    {% else %}
+      <p>No hay datos a mostrar</p>
+    {% endif %}
+{% endblock %}

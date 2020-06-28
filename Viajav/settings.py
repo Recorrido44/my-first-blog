@@ -26,7 +26,7 @@ SECRET_KEY = '+14$9w3e(qjjo+-)r0@zb@w#1@q33pl!c)yroamva0-k!@z-^y'
 DEBUG = True
 
 # ALLOWED_HOSTS = ['127.0.0.1', 'recorrido.pythonanywhere.com']
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'recorrido.pythonanywhere.com']
 
 
 # Application definition
