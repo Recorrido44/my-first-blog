@@ -32,4 +32,7 @@ urlpatterns = [
     url(r'^alimento/resumen/$', views.Alimento_Resumen_Vista.as_view(), name='consumo_resumen'),
     url(r'^alimento/verconsumo/$', views.Alimento_Verconsumo_Vista.as_view(), name='consumo_mostrar'),
     url(r'^alimento/borrar/(?P<pk>[0-9]+)/$', views.Alimento_Eliminar_Vista.as_view(), name='consumo_borrar'),
+    url(r'^peso/resumen/$', views.Peso_Resumen_Vista.as_view(), name='peso_resumen'),
+    url(r'^peso/nuevo/$', views.Peso_Nuevo_Vista.as_view(), name='peso_nuevo'),
+    url(r'^peso/borrar/(?P<pk>[0-9]+)/$', views.Peso_Eliminar_Vista.as_view(), name='peso_borrar'),
 ]

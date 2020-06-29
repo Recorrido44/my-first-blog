@@ -105,7 +105,7 @@ class Consumo (models.Model):
         """
         Cadena para representar el objeto MyModelName (en el sitio de Admin, etc.)
         """
-        return str(self.fecha) + ' - ' +str(self.aldia) + ' - ' + str(self.porciones) + ' porciones de ' + str(self.alimento)
+        return str(self.fecha) + ' - ' + str(self.aldia) + ' - ' + str(self.porciones) + ' porciones de ' + str(self.alimento)
 
 class Peso (models.Model):
     peso = models.DecimalField(max_digits = 5, decimal_places = 2)
@@ -116,7 +116,7 @@ class Peso (models.Model):
         """
         Cadena para representar el objeto MyModelName (en el sitio de Admin, etc.)
         """
-        return self.peso
+        return str(self.fecha) + ' - ' + str(self.peso)
 
 
 

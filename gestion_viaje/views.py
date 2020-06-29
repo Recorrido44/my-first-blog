@@ -7,8 +7,8 @@ from django.utils import timezone
 from django.views.generic import ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
-from gestion_viaje.forms import Km_Nuevo_Form, Km_Final_Form, Alimento_Nuevo_Form, Alimento_Consumo_Form
-from gestion_viaje.models import Parametro, Kilometro, Alimento, Consumo
+from gestion_viaje.forms import Km_Nuevo_Form, Km_Final_Form, Alimento_Nuevo_Form, Alimento_Consumo_Form, Peso_Nuevo_Form
+from gestion_viaje.models import Parametro, Kilometro, Alimento, Consumo, Peso
 
 
 class Km_Muestra_Vista(ListView):
@@ -129,3 +129,27 @@ class Alimento_Eliminar_Vista(DeleteView):
     model = Consumo
     template_name = 'alimento_borrar.html'
     success_url = reverse_lazy('consumo_resumen')
+
+class Peso_Resumen_Vista(ListView):
+    model = Peso
+    template_name = 'peso_resumen.html'
+
+
+class Peso_Nuevo_Vista(CreateView):
+    model = Alimento
+    form_class = Peso_Nuevo_Form
+    template_name = 'peso_nuevo.html'
+    success_url = reverse_lazy('peso_resumen')
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.fecha = timezone.now()
+        self.object.usuario = 'adminjav'
+        self.object.save()
+
+        return super(Peso_Nuevo_Vista, self).form_valid(form)
+
+class Peso_Eliminar_Vista(DeleteView):
+    model = Peso
+    template_name = 'peso_borrar.html'
+    success_url = reverse_lazy('peso_resumen')

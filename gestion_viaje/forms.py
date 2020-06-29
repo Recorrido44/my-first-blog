@@ -3,7 +3,7 @@ from datetime import datetime
 from django import forms
 from django.forms import ModelForm, Textarea, DateTimeInput
 
-from gestion_viaje.models import Parametro, Kilometro, Alimento, Consumo
+from gestion_viaje.models import Parametro, Kilometro, Alimento, Consumo, Peso
 import datetime
 
 
@@ -54,3 +54,11 @@ class Alimento_Consumo_Form(ModelForm):
                   'porciones':('Porciones consumidas'),
                   }
 
+
+class Peso_Nuevo_Form(ModelForm):
+    class Meta:
+        model = Peso
+        fields = ['peso', ]
+        labels = {'peso': ('Mi peso de hoy es '),
+
+                  }
