@@ -43,6 +43,4 @@ urlpatterns = [
     url(r'^peso/resumen/$', login_required(views.Peso_Resumen_Vista.as_view()), name='peso_resumen'),
     url(r'^peso/nuevo/$', views.Peso_Nuevo_Vista.as_view(), name='peso_nuevo'),
     url(r'^peso/borrar/(?P<pk>[0-9]+)/$', views.Peso_Eliminar_Vista.as_view(), name='peso_borrar'),
-    url(r'^peso/$', api.GPSRegisList.as_view()),
-    url(r'^peso/(?P<pk>[0-9]+)/$', api.GPSRegisDetail.as_view()),
 ]
