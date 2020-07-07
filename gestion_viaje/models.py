@@ -54,6 +54,9 @@ class Porcion (models.Model):
     fecha = models.DateField()
     usuario = models.CharField(max_length=45)
 
+    class Meta:
+        ordering = ["txtMedida"]
+
     def __str__(self):
         """
         Cadena para representar el objeto MyModelName (en el sitio de Admin, etc.)
@@ -117,6 +120,19 @@ class Peso (models.Model):
         Cadena para representar el objeto MyModelName (en el sitio de Admin, etc.)
         """
         return str(self.fecha) + ' - ' + str(self.peso)
+
+class GPSRegis (models.Model):
+    lat = models.DecimalField(max_digits=20, decimal_places=15)
+    lon = models.DecimalField(max_digits=20, decimal_places=15)
+    cel = models.CharField(max_length=45)
+    fecha = models.DateTimeField()
+    usuario = models.CharField(max_length=45)
+
+    def __str__(self):
+        """
+        Cadena para representar el objeto MyModelName (en el sitio de Admin, etc.)
+        """
+        return str(self.lat) + ';' + str(self.lon) + ';' + str(self.fecha) + ';' + self.cel + ';' + self.usuario
 
 
 

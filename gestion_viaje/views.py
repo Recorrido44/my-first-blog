@@ -1,14 +1,17 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+from django.contrib.auth.decorators import permission_required
 from django.db.models import F
 from django.urls import reverse_lazy
 from django.utils import timezone
+from django.utils.decorators import method_decorator
 from django.views.generic import ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
 from gestion_viaje.forms import Km_Nuevo_Form, Km_Final_Form, Alimento_Nuevo_Form, Alimento_Consumo_Form, Peso_Nuevo_Form
 from gestion_viaje.models import Parametro, Kilometro, Alimento, Consumo, Peso
+
 
 
 class Km_Muestra_Vista(ListView):
@@ -80,8 +83,9 @@ class Alimento_Nuevo_Vista(CreateView):
     model = Alimento
     form_class = Alimento_Nuevo_Form
     template_name = 'alimento_nuevo.html'
-    success_url = reverse_lazy('consumo_resumen')
+    success_url = reverse_lazy('alimento_nuevo')
 
+    # @method_decorator(permission_required('gestion_viaje.add_alimento', reverse_lazy('consumo_resumen')))
     def form_valid(self, form):
         self.object = form.save(commit=False)
         self.object.fecha = timezone.now()
@@ -117,11 +121,14 @@ class Alimento_Resumen_Vista(ListView):
                                                 "where alimento_id = gestion_viaje_consumo.alimento_id"
                                                 ") )calorias "
                                             " from gestion_viaje_consumo "
-                                            " group by date(fecha,'localtime')")
+                                            " group by date(fecha,'localtime')"
+                                            " order by date(fecha,'localtime') desc")
 
 
 class Alimento_Verconsumo_Vista(ListView):
     model = Consumo
+    paginate_by = 10
+    ordering = ['-fecha']
     template_name = 'consumo_muestra.html'
 
 
@@ -136,10 +143,12 @@ class Peso_Resumen_Vista(ListView):
 
 
 class Peso_Nuevo_Vista(CreateView):
-    model = Alimento
+    model = Peso
     form_class = Peso_Nuevo_Form
     template_name = 'peso_nuevo.html'
     success_url = reverse_lazy('peso_resumen')
+
+    # @method_decorator(permission_required('gestion_viaje.add_peso', reverse_lazy('peso_resumen')))
 
     def form_valid(self, form):
         self.object = form.save(commit=False)
@@ -153,3 +162,12 @@ class Peso_Eliminar_Vista(DeleteView):
     model = Peso
     template_name = 'peso_borrar.html'
     success_url = reverse_lazy('peso_resumen')
+
+    @method_decorator(permission_required('gestion_viaje.delete_peso', reverse_lazy('peso_resumen')))
+
+    def form_valid(self, form):
+
+        return super(Peso_Nuevo_Vista, self).form_valid(form)
+
+
+

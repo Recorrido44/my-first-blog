@@ -2,6 +2,16 @@
 
 {% block content %}
     <h2>Alimento</h2>
+        <form method="GET" class="post-form">{% csrf_token %}
+            <table>
+                 <td width="10%">
+                    <p><a href="../consumo" >Registrar nuevo consumo</p>
+                </td>
+                 <td width="10%">
+                    <p></p>
+                </td>
+            </table>
+        </form>
     <form method="POST" class="viaje-form">{% csrf_token %}
         {{ form.as_p}}
         <button type="submit" class="save btn btn-default">Guardar</button>

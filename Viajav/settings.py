@@ -26,7 +26,7 @@ SECRET_KEY = '+14$9w3e(qjjo+-)r0@zb@w#1@q33pl!c)yroamva0-k!@z-^y'
 DEBUG = True
 
 # ALLOWED_HOSTS = ['127.0.0.1', 'recorrido.pythonanywhere.com']
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'recorrido.pythonanywhere.com']
+ALLOWED_HOSTS = ['127.0.0.1', '192.168.1.77', 'localhost', 'recorrido.pythonanywhere.com']
 
 
 # Application definition
@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'seguridad',
     'gestion_viaje',
 ]
 
@@ -56,7 +58,7 @@ ROOT_URLCONF = 'Viajav.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -120,3 +122,23 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
+LOGIN_URL = '/'
+
+REST_FRAMEWORK = {
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+    ),
+    'DEFAULT_PARSER_CLASSES': (
+        'rest_framework.parsers.JSONParser',
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+    ),
+    'DEFAULT_PERMISSIONS_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+}
+
