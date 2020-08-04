@@ -12,6 +12,12 @@ class Parametro(models.Model):
     fecha = models.DateTimeField(blank=True, null=True, )
     usuario = models.CharField(max_length=100)
 
+    def __str__(self):
+        """
+        Cadena para representar el objeto MyModelName (en el sitio de Admin, etc.)
+        """
+        return self.descripcion + ', ' + str(self.valor)
+
 
 class Kilometro(models.Model):
     fechaini = models.DateTimeField(auto_now=True)
