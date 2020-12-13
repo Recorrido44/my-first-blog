@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import string
 
 from django.db import models
 
@@ -39,6 +40,14 @@ class Kilometro(models.Model):
     vehiculo = models.CharField(max_length=100)
     parametro = models.ForeignKey(Parametro, on_delete=models.CASCADE)
     usuario = models.CharField(max_length=100)
+
+    def __str__(self):
+        """
+        Cadena para representar el objeto MyModelName (en el sitio de Admin, etc.)
+        """
+        return str(self.fechafin) + '* kmini: ' + str(self.kmini) + '; ' + '* kmfin: ' + str(self.kmfin) + '-' + self.tipo + '- $' + str(self.entrada) +' precio:' + str(self.parametro) +'; '
+
+
 
 
 
