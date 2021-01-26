@@ -1,18 +1,39 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+import datetime
+import decimal
+
 from django.contrib.auth.decorators import permission_required
 from django.db.models import F
 from django.urls import reverse_lazy
 from django.utils import timezone
 from django.utils.decorators import method_decorator
-from django.views.generic import ListView
-from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, TemplateView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView, FormView
 
-from gestion_viaje.forms import Km_Nuevo_Form, Km_Final_Form, Alimento_Nuevo_Form, Alimento_Consumo_Form, Peso_Nuevo_Form
-from gestion_viaje.models import Parametro, Kilometro, Alimento, Consumo, Peso
+from gestion_viaje.forms import Km_Nuevo_Form, Km_Final_Form, Alimento_Nuevo_Form, Alimento_Consumo_Form, \
+    Peso_Nuevo_Form, Ubicacion_Form, Measurements_Form, Alimento_Consumo_aldia_Form, Alimento_Alta_Form
+from gestion_viaje.models import Parametro, Kilometro, Alimento, Consumo, Peso, Ubicacion, Measurements
 
+from django.http import HttpResponse, HttpResponseRedirect
+from django.views import View
+from django.template import loader
 
+class MyView(View):
+
+    def get(self, request, *args, **kwargs):
+        return HttpResponse('Hello, World!')
+
+class HomePageView(TemplateView):
+
+    template_name = "alimento.html"
+
+    def get_context_data(self, **kwargs):
+
+        context = super().get_context_data(**kwargs)
+        context['latest_alimento'] = Alimento.objects.all()[:5]
+        return context
 
 class Km_Muestra_Vista(ListView):
     modelo = Kilometro
@@ -110,6 +131,69 @@ class Alimento_Consumo_Vista(CreateView):
 
         return super(Alimento_Consumo_Vista, self).form_valid(form)
 
+class Alimento_Consumo_Alta(CreateView):
+    model = Consumo
+    form_class = Alimento_Alta_Form
+    template_name = 'alimento_alta.html'
+    success_url = reverse_lazy('consumo_registro_1')
+
+    def mialta(request, offset,offset2):
+        offset = int(offset)
+        offset2= int (offset2)
+        return reverse_lazy('consumo_alta_1')
+
+    def form_valid(self, form,offset):
+        self.object = form.save(commit=False)
+        self.object.fecha = timezone.now()
+        self.object.usuario = 'adminjav'
+        assert False
+        self.object.save()
+
+        return super(Alimento_Consumo_Vista, self).form_valid(form)
+
+class Alimento_Consumo_Aldia_Vista(ListView):
+    model = Consumo
+    form = Alimento_Alta_Form
+    template_name = 'alimento_consumo_aldia.html'
+    mitemp = ' 1 '
+    success_url = reverse_lazy('consumo_registro_1')
+
+    def get_queryset(self):
+        return Consumo.objects.raw(" select s.id,t.alimento_id,t.txtNomAlim ,t.aldia_id,t.txtAldia "
+                                   " FROM gestion_viaje_consumo s, ( "
+                                   " select alimento_id,txtNomAlim ,aldia_id,txtAldia " 
+                                     " from  gestion_viaje_consumo c, "
+                                     " 		gestion_viaje_alimento a, "
+                                     "  	gestion_viaje_aldia b " 
+									 " where c.alimento_id=a.id " 
+									 " and c.aldia_id=b.id " 
+									 " and aldia_id = 5  "
+                                     " and alimento_id = 11 "
+									 " and c.fecha < date('now') "
+                                     " group by alimento_id "
+									 " EXCEPT "
+                                     " select alimento_id,txtNomAlim ,aldia_id,txtAldia " 
+                                     " from  gestion_viaje_consumo c, "
+                                     " 		gestion_viaje_alimento a, "
+                                     " 		gestion_viaje_aldia b " 
+									 " where c.alimento_id=a.id " 
+									 " and c.aldia_id=b.id " 
+									 " and aldia_id = 5  "
+                                     " and alimento_id = 11 "
+									 " and c.fecha > date('now','-1 day') "
+                                     " group by alimento_id "									 
+									 " ORDER by txtNomAlim ) t "
+                                     " group by t.alimento_id "									 
+                                     " ORDER by txtNomAlim "
+                                   )
+
+    def carga(request):
+
+
+        return HttpResponse(request.object_list)
+        ## return HttpResponseRedirect(reverse_lazy('consumo_registro_1'))
+
+
 
 class Alimento_Resumen_Vista(ListView):
     model = Consumo
@@ -117,8 +201,8 @@ class Alimento_Resumen_Vista(ListView):
     def get_queryset(self):
         return Consumo.objects.raw("select id,date(fecha,'localtime'), sum(porciones * ( "
                                                 "select intKCal "
-                                                "from  gestion_viaje_alimento "
-                                                "where alimento_id = gestion_viaje_consumo.alimento_id"
+                                                "from  gestion_viaje_alimento ga "
+                                                "where ga.id = gestion_viaje_consumo.alimento_id"
                                                 ") )calorias "
                                             " from gestion_viaje_consumo "
                                             " group by date(fecha,'localtime')"
@@ -169,5 +253,70 @@ class Peso_Eliminar_Vista(DeleteView):
 
         return super(Peso_Nuevo_Vista, self).form_valid(form)
 
+class Mapa_Ver(CreateView):
+    model = Ubicacion
+    form_class = Ubicacion_Form
+    template_name = 'ubicacion_nuevo.html'
+    success_url = reverse_lazy('peso_resumen')
+
+    # @method_decorator(permission_required('gestion_viaje.add_peso', reverse_lazy('peso_resumen')))
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.fecha = timezone.now()
+        self.object.usuario = 'adminjav'
+        self.object.save()
 
 
+class Mapa_VerMea(ListView):
+    model = Measurements
+    template_name = 'mainmea.html'
+
+
+class Mapa_VerMeaNvo(CreateView):
+    model = Measurements
+    form_class = Measurements_Form
+    template_name = 'mainmeanvo.html'
+    success_url = reverse_lazy('mapa_verm')
+
+    # @method_decorator(permission_required('gestion_viaje.add_peso', reverse_lazy('peso_resumen')))
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.location = 'CDMX'
+        self.object.distance = 5000.00
+        self.object.created = timezone.now()
+        self.object.save()
+
+        return super(Mapa_VerMeaNvo, self).form_valid(form)
+
+
+class Mivista(View):
+
+    # def current_datetime(request):
+    def current_datetime(request):
+        now = datetime.datetime.now()
+        html = "<html><body>It is now %s.</body></html>" % now
+        return HttpResponse(html)
+
+    def hours_ahead(request, offset,offset2):
+        offset = int(offset)
+        # assert False
+        dt = datetime.datetime.now() + datetime.timedelta(hours=offset)
+        html = "<html><body>In %s hour(s), it will be %s.</body></html>" % (offset, dt)
+        return HttpResponse(html)
+
+    def carga(request):
+        consumo = Consumo()
+        consumo.fecha = timezone.now()
+        consumo.usuario = 'adminjav'
+        consumo.alimento_id = 5
+        consumo.aldia_id = 5
+        consumo.porciones = 2
+        consumo.save()
+
+        template = loader.get_template('consumo_alta_1')
+        context = {
+            'new_consumo_id': consumo.pk,
+        }
+        return HttpResponse(template.render(context, request))
